@@ -145,3 +145,12 @@ BEGIN
 END
 GO;
 
+-- Test trigger for tb_area_estudos (INSERT)
+INSERT INTO tb_area_estudos(area_estudo) VALUES ('TEST');
+
+-- Test trigger for tb_area_estudos (UPDATE)
+UPDATE tb_area_estudos SET area_estudo = 'TEST 2' WHERE id_area_estudo = 1;
+
+-- Test trigger for tb_area_estudos (DELETE)
+DELETE FROM tb_area_estudos WHERE id_area_estudo = 1;
+
