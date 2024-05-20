@@ -1,3 +1,4 @@
+DECLARE @id_referencia INT, @ano INT, @localizacao VARCHAR(255), @genero VARCHAR(10), @nivel VARCHAR(50), @area_estudo VARCHAR(50);
 DECLARE cursor_info_completa CURSOR READ_ONLY FOR
 SELECT
     r.id_referencia,
@@ -11,6 +12,18 @@ FROM
 INNER JOIN tb_localizacoes l ON r.id_loc = l.id_loc
 INNER JOIN tb_generos g ON r.id_genero = g.id_genero
 INNER JOIN tb_niveis n ON r.id_nivel = n.id_nivel
-INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo
+INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo;
 
 OPEN cursor_info_completa;
+
+FETCH NEXT FROM cursor_info_completa INTO @id_referencia, @ano, @localizacao, @genero, @nivel, @area_estudo;
+
+WHILE @@FETCH_STATUS = 0
+BEGIN
+    PRINT CAST(@id_referencia AS VARCHAR) + ', ' + CAST(@ano AS VARCHAR) + ', ' + @localizacao + ', ' +@genero + ', ' + @nivel + ', ' +@area_estudo;
+
+    FETCH NEXT FROM cursor_info_completa INTO @id_referencia, @ano, @localizacao, @genero, @nivel, @area_estudo;
+END;
+
+CLOSE cursor_info_completa;
+DEALLOCATE cursor_info_completa;
