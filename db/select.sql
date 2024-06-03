@@ -1,3 +1,4 @@
+-- ROW_NUMBER() - Retorna um número sequencial para cada linha de um conjunto de resultados.
 SELECT ROW_NUMBER() OVER (ORDER BY r.id_referencia) AS row_num,
        r.id_referencia,
        r.ano,
@@ -12,6 +13,7 @@ INNER JOIN tb_niveis n ON r.id_nivel = n.id_nivel
 INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo;
 GO;
 
+-- RANK() - Retorna um número de classificação para cada linha de um conjunto de resultados.
 SELECT RANK() OVER (ORDER BY r.id_referencia) AS rank,
        r.id_referencia,
        r.ano,
@@ -26,6 +28,7 @@ INNER JOIN tb_niveis n ON r.id_nivel = n.id_nivel
 INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo;
 GO;
 
+-- DENSE_RANK() - Retorna um número de classificação para cada linha de um conjunto de resultados, sem lacunas.
 SELECT DENSE_RANK() OVER (ORDER BY r.id_referencia) AS dense_rank,
        r.id_referencia,
        r.ano,
@@ -40,7 +43,8 @@ INNER JOIN tb_niveis n ON r.id_nivel = n.id_nivel
 INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo;
 GO;
 
-SELECT tb_referencias, tb_localizacoes, tb_generos, tb_niveis, tb_area_estudos, ROW_NUMBER() OVER (PARTITION BY r.id_loc ORDER BY r.id_referencia) AS row_num,
+-- PARTITION BY - Divide o conjunto de resultados em partições para as quais a função ROW_NUMBER() é aplicada.
+SELECT ROW_NUMBER() OVER (PARTITION BY r.id_genero ORDER BY r.id_referencia) AS row_num,
        r.id_referencia,
        r.ano,
        l.localizacao,

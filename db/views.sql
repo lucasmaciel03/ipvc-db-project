@@ -79,7 +79,7 @@ FROM
 PIVOT
 (
     SUM(num_referencias)
-    FOR area_estudo IN ([Medicina], [Engenharia], [Informática], [Matemática], [Biologia])
+    FOR area_estudo IN ([Medicina], [Desporto], [Informática], [Ciências da Comunicação], [Direito])
 ) as pivot_table;
 GO;
 --Concede permissão de SELECT na terceira view para o utilizador userAPI

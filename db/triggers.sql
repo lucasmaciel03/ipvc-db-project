@@ -43,11 +43,21 @@ BEGIN
     INSERT INTO tb_audit_log (table_name, operation_type, username, old_data, new_data)
     VALUES ('tb_area_estudos', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
 END
+
+-- Test trigger for tb_area_estudos (INSERT)
+INSERT INTO tb_area_estudos(area_estudo) VALUES ('TEST');
+
+-- Test trigger for tb_area_estudos (UPDATE)
+UPDATE tb_area_estudos SET area_estudo = 'TEST 2' WHERE id_area_estudo = 1;
+
+-- Test trigger for tb_area_estudos (DELETE)
+DELETE FROM tb_area_estudos WHERE id_area_estudo = 1;
+
 GO;
 
 -- Trigger para a tabela tb_audit_log que regista as operações na tabela tb_genero
-CREATE TRIGGER tr_genero
-ON tb_genero
+CREATE TRIGGER tr_generos
+ON tb_generos
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
@@ -65,13 +75,24 @@ BEGIN
     END
 
     INSERT INTO tb_audit_log (table_name, operation_type, username, old_data, new_data)
-    VALUES ('tb_genero', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
+    VALUES ('tb_generos', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
 END
+
+
+-- Test trigger for tb_generos (INSERT)
+INSERT INTO tb_generos(genero) VALUES ('TEST');
+
+-- Test trigger for tb_generos (UPDATE)
+UPDATE tb_generos SET genero = 'TEST 2' WHERE id_genero = 1;
+
+-- Test trigger for tb_generos (DELETE)
+DELETE FROM tb_generos WHERE id_genero = 1;
+
 GO;
 
--- Trigger para a tabela tb_audit_log que regista as operações na tabela tb_locations
+-- Trigger para a tabela tb_audit_log que regista as operações na tabela tb_localizacoes
 CREATE TRIGGER tr_locations
-ON tb_locations
+ON tb_localizacoes
 AFTER INSERT, UPDATE, DELETE
 AS
 BEGIN
@@ -89,8 +110,17 @@ BEGIN
     END
 
     INSERT INTO tb_audit_log (table_name, operation_type, username, old_data, new_data)
-    VALUES ('tb_locations', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
+    VALUES ('tb_localizacoes', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
 END
+
+-- Test trigger for tb_localizacoes (INSERT)
+INSERT INTO tb_localizacoes(localizacao) VALUES ('TEST');
+
+-- Test trigger for tb_localizacoes (UPDATE)
+UPDATE tb_localizacoes SET localizacao = 'TEST 2' WHERE id_loc = 1;
+
+-- Test trigger for tb_localizacoes (DELETE)
+DELETE FROM tb_localizacoes WHERE id_loc = 1;
 GO;
 
 -- Trigger para a tabela tb_audit_log que regista as operações na tabela tb_niveis
@@ -115,6 +145,15 @@ BEGIN
     INSERT INTO tb_audit_log (table_name, operation_type, username, old_data, new_data)
     VALUES ('tb_niveis', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
 END
+
+-- Test trigger for tb_niveis (INSERT)
+INSERT INTO tb_niveis(nivel) VALUES ('TEST');
+
+-- Test trigger for tb_niveis (UPDATE)
+UPDATE tb_niveis SET nivel = 'TEST 2' WHERE id_nivel = 1;
+
+-- Test trigger for tb_niveis (DELETE)
+DELETE FROM tb_niveis WHERE id_nivel = 1;
 GO;
 
 -- Trigger para a tabela tb_audit_log que regista as operações na tabela tb_referencias
@@ -139,14 +178,15 @@ BEGIN
     INSERT INTO tb_audit_log (table_name, operation_type, username, old_data, new_data)
     VALUES ('tb_referencias', @operation_type, SUSER_NAME(), (SELECT * FROM deleted FOR XML AUTO), (SELECT * FROM inserted FOR XML AUTO));
 END
+
+-- Test trigger for tb_referencias (INSERT)
+INSERT INTO tb_referencias(ano, id_loc, id_genero, id_nivel, id_area_estudo) VALUES (2022, 1, 1, 1, 1);
+
+-- Test trigger for tb_referencias (UPDATE)
+UPDATE tb_referencias SET ano = '2024' WHERE id_referencia = 80004;
+
+-- Test trigger for tb_referencias (DELETE)
+DELETE FROM tb_referencias WHERE id_referencia = 1;
 GO;
 
--- Test trigger for tb_area_estudos (INSERT)
-INSERT INTO tb_area_estudos(area_estudo) VALUES ('TEST');
-
--- Test trigger for tb_area_estudos (UPDATE)
-UPDATE tb_area_estudos SET area_estudo = 'TEST 2' WHERE id_area_estudo = 1;
-
--- Test trigger for tb_area_estudos (DELETE)
-DELETE FROM tb_area_estudos WHERE id_area_estudo = 1;
 

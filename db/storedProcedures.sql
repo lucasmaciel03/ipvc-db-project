@@ -14,6 +14,8 @@ go;
 
 -- Comando para usar o stored procedure
 EXEC sp_inserir_referencia @id_loc = 1, @id_genero = 1,@id_nivel = 1,@id_area_estudo = 1, @ano = 2020;
+
+
 go;
 -- Procedure para remoção de dados
 CREATE PROCEDURE sp_remover_referencia
@@ -48,16 +50,17 @@ BEGIN
         IF @@TRANCOUNT > 0
             ROLLBACK TRANSACTION
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT
-        SELECT @ErrorMessage = ERROR_MESSAGE(),
+        SELECT @ErrorMessage = 'Ocorreu um erro ao inserir os dados. Por favor, tente novamente.',
                @ErrorSeverity = ERROR_SEVERITY()
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1)
     END CATCH
 END;
 
 -- Comando para usar o stored procedure
-EXEC sp_inserir_referencias_com_transacao @id_loc = 1, @id_genero = 1,@id_nivel = 1,@id_area_estudo = 1, @ano = 2020;
+EXEC sp_inserir_referencias_com_transacao @id_loc = 1, @id_genero = 1,@id_nivel = 1,@id_area_estudo = 1, @ano = -2020;
 go;
 
+-- Este procedimento armazena o nome da tabela numa variável e insere os dados na tabela com o nome armazenado
 CREATE PROCEDURE sp_inserir_referencia_dinamico
     @id_loc INT,
     @id_genero INT,
@@ -75,16 +78,16 @@ BEGIN
     SET @SQL = N'INSERT INTO ' + QUOTENAME(@nome_tabela) + N'(id_loc, id_genero, id_nivel, id_area_estudo,ano)
     VALUES (@id_loc, @id_genero, @id_nivel, @id_area_estudo, @ano)';
 
-    EXEC sp_executarsql @SQL, N'@id_loc INT, @id_genero INT, @id_nivel INT, @id_area_estudo INT, @ano INT', @id_loc, @id_genero, @id_nivel, @id_area_estudo, @ano;
+    EXEC sp_executesql @SQL, N'@id_loc INT, @id_genero INT, @id_nivel INT, @id_area_estudo INT, @ano INT', @id_loc, @id_genero, @id_nivel, @id_area_estudo, @ano;
 
     SET @COUNTSQL = N'SELECT COUNT(*) AS TotalRegistos FROM ' + QUOTENAME(@nome_tabela);
 
-    EXEC sp_executarsql @COUNTSQL;
+    EXEC sp_executesql @COUNTSQL;
 END
 go;
 
 -- Comando para usar o stored procedure
-EXEC sp_inserir_referencia_dinamico @id_loc = 1, @id_genero = 1,@id_nivel = 1,@id_area_estudo = 1, @ano = 2020, @nome_tabela = 'tb_referencias';
+EXEC sp_inserir_referencia_dinamico @id_loc = 1, @id_genero = 1,@id_nivel = 1,@id_area_estudo = 1, @ano = 2022, @nome_tabela = 'tb_referencias';
 go;
 
 -- Procedure que retorna e transforma dados de uma tabela num JSON
@@ -98,15 +101,7 @@ BEGIN
 
     SET @SQL = N'SELECT * FROM ' + QUOTENAME(@nome_tabela) + 'FOR JSON AUTO';
 
-    --Tabela temporária para guardar os dados json
-    CREATE TABLE #temp (json NVARCHAR(MAX));
-
-    INSERT INTO #temp (json)
     EXEC sp_executesql @SQL;
-
-    SELECT json FROM #temp;
-
-    DROP TABLE #temp;
 END
 go;
 
@@ -124,14 +119,26 @@ BEGIN
 
     DECLARE @SQL NVARCHAR(MAX);
 
-    SET @SQL = N'INSERT INTO ' + QUOTENAME(@nome_tabela) + ' SELECT * FROM OPENJSON(@json) WITH (' + @json + ')';
+    SET @SQL = N'
+    INSERT INTO ' + QUOTENAME(@nome_tabela) + ' 
+    SELECT ano, id_loc, id_genero, id_nivel, id_area_estudo
+    FROM OPENJSON(@json)
+    WITH (
+        ano INT,
+        id_loc INT,
+        id_genero INT,
+        id_nivel INT,
+        id_area_estudo INT
+    )';
 
     EXEC sp_executesql @SQL, N'@json NVARCHAR(MAX)', @json;
 END
 go;
 
 -- Comando para usar o stored procedure
-EXEC sp_inserir_dados_json @json = N'{"ano":2020,"id_loc":1,"id_genero":1,"id_nivel":1,"id_area_estudo":1}', @nome_tabela = 'tb_referencias';
+EXEC sp_inserir_dados_json 
+    @json = N'{"ano":2020,"id_loc":1,"id_genero":1,"id_nivel":1,"id_area_estudo":1}', 
+    @nome_tabela = 'tb_referencias';
 go;
 
 
@@ -151,10 +158,12 @@ BEGIN
     END TRY
     BEGIN CATCH
         DECLARE @ErrorMessage NVARCHAR(4000), @ErrorSeverity INT
-        SELECT @ErrorMessage = "Você não tem permissão para utilizar esta view.",
+        SELECT @ErrorMessage = 'Você não tem permissão para utilizar esta view.',
                @ErrorSeverity = ERROR_SEVERITY()
         RAISERROR(@ErrorMessage, @ErrorSeverity, 1)
     END CATCH
 END
 go;
 
+-- Comando para usar o stored procedure
+EXEC sp_validar_permissao_view @nome_view = 'vw_povoa_varzim_feminino_medicina';
