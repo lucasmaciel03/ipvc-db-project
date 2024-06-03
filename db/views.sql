@@ -59,7 +59,7 @@ FROM
     GROUP BY l.localizacao;
 GO;
 --Concede permissão de SELECT na segunda view para o utilizador userAPI
-GRANT SELECT ON vw_union TO userAPI;
+GRANT SELECT ON vw_referencias_por_localizacao_genero TO userAPI;
 
 
 

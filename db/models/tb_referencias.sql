@@ -11,4 +11,3 @@ CREATE TABLE tb_referencias(
     FOREIGN KEY (id_nivel) REFERENCES tb_niveis(id_nivel),
     FOREIGN KEY (id_area_estudo) REFERENCES tb_area_estudos(id_area_estudo)
 );
-

@@ -6,21 +6,17 @@ ON tb_referencias
 INSTEAD OF INSERT
 AS
 BEGIN
-    
-    -- Checl if any inserted year is greater than the current year
     IF EXISTS(SELECT 1 FROM inserted WHERE ano > YEAR(GETDATE()))
     BEGIN
         RAISERROR('Ano inválido. O ano não pode ser futuro.', 16, 1)
         RETURN;
     END;
-
-    -- If all checks pass, insert the data into tb_referencias
     INSERT INTO tb_referencias(ano, id_loc, id_genero, id_nivel, id_area_estudo)
     SELECT ano, id_loc, id_genero, id_nivel, id_area_estudo
     FROM inserted;
 END
 
--- Insert example to activate the trigger
+-- Insert example to activate the trigger / won't work because the year is in the future
 INSERT INTO tb_referencias(ano, id_loc, id_genero, id_nivel, id_area_estudo) VALUES (2027, 1, 1, 1, 1);
 GO;
 

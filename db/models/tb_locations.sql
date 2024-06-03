@@ -5,3 +5,5 @@ CREATE TABLE tb_localizacoes(
 );
 
 CREATE INDEX idx_loc ON tb_localizacoes(id_loc);
+
+
