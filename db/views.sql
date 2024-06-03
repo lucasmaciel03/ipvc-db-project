@@ -1,6 +1,3 @@
--- Cria o utilizador userAPI
-CREATE USER userAPI FOR LOGIN userAPI;
-Go;
 -- View with joins que retorna as pessoas da póvoa de varzim de género feminino com licenciatura em Medicina entre 2020 e 2024
 CREATE VIEW vw_povoa_varzim_feminino_medicina AS
 SELECT  
@@ -15,12 +12,17 @@ FROM
 INNER JOIN tb_localizacoes l ON r.id_loc = l.id_loc
 INNER JOIN tb_generos g ON r.id_genero = g.id_genero
 INNER JOIN tb_niveis n ON r.id_nivel = n.id_nivel
-INNER JOIN tb_area_estudos ON r.id_area_estudo = ae.id_area_estudo
+INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo
 WHERE l.localizacao = 'Póvoa de Varzim'
 AND g.genero = 'F'
-AND n.nivel = 'Licenciatura'
+AND n.nivel = 'Ensino Superior - Licenciatura'
 AND ae.area_estudo = 'Medicina'
 AND r.ano BETWEEN 2020 AND 2024;
+
+
+
+
+
 GO;
 
 -- Comando para utilizar a view
