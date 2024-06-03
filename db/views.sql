@@ -60,6 +60,28 @@ FROM
 GO;
 --Concede permissão de SELECT na segunda view para o utilizador userAPI
 GRANT SELECT ON vw_referencias_por_localizacao_genero TO userAPI;
+GO;
+--View que utiliza pivot para retornar o número de referências do ano 2022 por area de estudo
+CREATE VIEW vw_referencias_2022_por_area_estudo AS
+SELECT
+    *
+FROM
+    (SELECT
+        ae.area_estudo,
+        COUNT(r.id_referencia) as num_referencias
+    FROM
+        tb_referencias r
+        INNER JOIN tb_area_estudos ae ON r.id_area_estudo = ae.id_area_estudo
+    WHERE r.ano = 2022
+    GROUP BY ae.area_estudo) as consulta
+PIVOT
+(
+    SUM(num_referencias)
+    FOR area_estudo IN ([Medicina], [Engenharia], [Informática], [Matemática], [Biologia])
+) as pivot_table;
+GO;
+--Concede permissão de SELECT na terceira view para o utilizador userAPI
+GRANT SELECT ON vw_referencias_2022_por_area_estudo TO userAPI;
 
 
 
