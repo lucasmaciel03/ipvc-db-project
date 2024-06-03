@@ -9,27 +9,21 @@ import { ReferenciasModel } from '../models/tb_referencias.js';
 
 // Função para guardar as referencias na base de dados
 async function storeReferencias() {
-    for (let i = 0; i < 500; i++) {
-        try {
-            await ReferenciasModel.create({
-                ano: Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000,
-                id_loc: Math.floor(Math.random() * (3400 - 1 + 1)) + 1,
-                id_genero: Math.floor(Math.random() * (2 - 1 + 1)) + 1,
-                id_nivel: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
-                id_area_estudo: Math.floor(Math.random() * (36 - 1 + 1)) + 1
-            });
-            console.log('Referencia guardada:', i);
-        } catch (error) {
-            console.error('Erro ao guardar referencia:', i, error);
-        }
-    }
-}
-
-export { storeReferencias };
-
-// Função para adicionar mais dados à tabela de referencias
-async function addReferencias() {
-    for (let i = 0; i < 500; i++) {
+    // for (let i = 0; i < 100; i++) {
+    //     try {
+    //         await ReferenciasModel.create({
+    //             ano: Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000,
+    //             id_loc: Math.floor(Math.random() * (3400 - 1 + 1)) + 1,
+    //             id_genero: Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+    //             id_nivel: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
+    //             id_area_estudo: Math.floor(Math.random() * (36 - 1 + 1)) + 1
+    //         });
+    //         console.log('Referencia guardada:', i);
+    //     } catch (error) {
+    //         console.error('Erro ao guardar referencia:', i, error);
+    //     }
+    // }
+    for (let i = 0; i < 100; i++) {
         try {
             await ReferenciasModel.create({
                 ano: Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000,
@@ -44,3 +38,25 @@ async function addReferencias() {
         }
     }
 }
+
+export { storeReferencias };
+
+// Função para adicionar mais dados à tabela de referencias
+async function addReferencias() {
+    for (let i = 0; i < 80000; i++) {
+        try {
+            await ReferenciasModel.create({
+                ano: Math.floor(Math.random() * (2024 - 2000 + 1)) + 2000,
+                id_loc: Math.floor(Math.random() * (3400 - 1 + 1)) + 1,
+                id_genero: Math.floor(Math.random() * (2 - 1 + 1)) + 1,
+                id_nivel: Math.floor(Math.random() * (4 - 1 + 1)) + 1,
+                id_area_estudo: Math.floor(Math.random() * (36 - 1 + 1)) + 1
+            });
+            console.log('Referencia adicionada:', i);
+        } catch (error) {
+            console.error('Erro ao adicionar referencia:', i, error);
+        }
+    }
+}
+
+// The table already has 80000 rows of data. Create a controller that generate mora data for the table.
